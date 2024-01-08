@@ -9,7 +9,7 @@
 /coverage
 
 # misc
-src/config.js
+src/components/utils/config.js
 .env
 .DS_Store
 .env.local
