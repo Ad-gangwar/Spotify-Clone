@@ -10,7 +10,7 @@ const app = express();
 router.post('/create', passport.authenticate("jwt", { session: false }), async (req, res) => {
     const { name, thumbnail, owner, songs } = req.body;
 
-    if (!name || !thumbnail || !owner) {
+    if (!name || !thumbnail) {
         return res.status(301).json({ err: "Insufficient Information to create Playlist" });
     }
 
@@ -30,7 +30,12 @@ router.post('/create', passport.authenticate("jwt", { session: false }), async (
 // /:xyz to assign any value to playlistId and to hit this route for any value of playlistId 
 router.get('/get/playlist/:playlistId', passport.authenticate("jwt", { session: false }), async (req, res) => {
     const plId = req.params.playlistId;
-    const playlist = await Playlist.findOne({ _id: plId });
+    const playlist = await Playlist.findOne({ _id: plId }).populate({
+        path: "songs",
+        populate: {
+            path: "artist"
+        }
+    });
     if (!playlist) {
         return res.status(301).json({ err: "Invalid ID" });
     }
@@ -38,19 +43,35 @@ router.get('/get/playlist/:playlistId', passport.authenticate("jwt", { session: 
     res.status(200).json(playlist);
 });
 
-//end point to fetch all the playlist created by an artist
-router.get('/get/artist/:artistId', passport.authenticate('jwt', {session: false}), async(req, res)=>{
-    const artistId=req.params.artistId;
-    const artist=await User.findOne({_id: artistId});
+// Get all playlists made by me
+// /get/me
+router.get(
+    "/get/me",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res) => {
+        const artistId = req.user._id;
 
-    if(!artist){
-        return res.status(301).json({err: 'Invalid Artist ID!'});
+        const playlists = await Playlist.find({ owner: artistId }).populate(
+            "owner"
+        );
+        return res.status(200).json({ data: playlists });
+    }
+);
+
+
+//end point to fetch all the playlist created by an artist
+router.get('/get/artist/:artistId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    const artistId = req.params.artistId;
+    const artist = await User.findOne({ _id: artistId });
+
+    if (!artist) {
+        return res.status(301).json({ err: 'Invalid Artist ID!' });
     }
 
-    const playlists=await Playlist.find({owner: artistId});
+    const playlists = await Playlist.find({ owner: artistId });
 
-    if(playlists.length===0){
-        return res.status(302).json({err: 'No playlist created by the artist'});
+    if (playlists.length === 0) {
+        return res.status(302).json({ err: 'No playlist created by the artist' });
     }
 
     return res.status(200).json(playlists);
@@ -60,7 +81,7 @@ router.get('/get/artist/:artistId', passport.authenticate('jwt', {session: false
 //end point route to add song to playlist
 router.post('/add/song', passport.authenticate("jwt", { session: false }), async (req, res) => {
     const { songId, playlistId } = req.body;
-    
+
     const playlist = await Playlist.findOne({ _id: playlistId });
     if (!playlist) {
         return res.status(304).json({ err: "Playlist not found!" });

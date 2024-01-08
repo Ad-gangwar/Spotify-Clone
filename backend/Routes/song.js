@@ -41,12 +41,23 @@ router.get('/get/artist/:artistId', passport.authenticate("jwt", { session: fals
     return res.status(200).json({ data: songs });
 });
 
-//get route to get songs by their name
-router.get('/get/name/:songName', passport.authenticate("jwt", { session: false }), async (req, res) => {
-    const songName = req.params.songName;
-    const song = await Song.findOne({ name: songName });
-    return res.status(200).json(song);
-})
+// Get route to get a single song by name
+router.get(
+    "/get/songname/:songName",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res) => {
+        const { songName } = req.params;
+
+        // Case-insensitive regex for pattern matching
+        const regex = new RegExp(songName, 'i');
+
+        // Using regex for case-insensitive matching
+        const songs = await Song.find({ name: regex }).populate("artist");
+
+        return res.status(200).json({ data: songs });
+    }
+);
+
 
 
 module.exports = router;

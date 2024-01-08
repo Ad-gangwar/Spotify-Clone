@@ -15,8 +15,8 @@ const songSchema = new mongoose.Schema({
     },
     artist: {
         type: mongoose.Types.ObjectId,
-        ref: "user"
+        ref: "User"
     },
 })
 
-module.exports = new mongoose.model('song', songSchema);
+module.exports = new mongoose.model('Song', songSchema);

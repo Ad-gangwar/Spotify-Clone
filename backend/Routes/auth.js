@@ -74,4 +74,10 @@ router.post('/login', async (req, res) => {
     return res.status(200).json(userToReturn);
 });
 
+router.post('/find/user', async(req, res)=>{
+    const email = req.body.email;
+    const user=await User.findOne({email: email});
+    return res.status(200).json({data: user});
+});
+
 module.exports = router;

@@ -9,7 +9,6 @@ const cors=require('cors');
 // Getting the secret key from environment variables
 const SECRET = process.env.SECRET;
 const URL=process.env.URL;
-
 // Importing the User model and authentication routes
 const User = require('./models/User');
 const authRoutes = require('./Routes/auth');
@@ -34,11 +33,12 @@ app.get("/", (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/song', songRoutes);
 app.use('/playlist', playlistRoutes);
-console.log(URL);
+
 // Connecting to the MongoDB database
 mongoose.connect(URL).then((x) => {
     console.log('Connected to the database');
 }).catch((err) => {
+    console.log(err);
     console.log('Error connecting to the database');
 });
 
@@ -51,7 +51,7 @@ opts.secretOrKey = SECRET;
 
 passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
     // Find the user in the database based on the JWT's sub (subject) claim
-    User.findOne({ id: jwt_payload.sub }).then(function (user) {
+    User.findOne({ _id: jwt_payload.identifier }).then(function (user) {
         if (user) {
             // If user is found, pass the user to the next middleware
             return done(null, user);
