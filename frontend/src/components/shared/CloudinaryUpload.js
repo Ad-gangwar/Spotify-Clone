@@ -1,5 +1,5 @@
 import { openUploadWidget } from "../utils/CloudinaryService";
-import { cloudinary_upload_preset } from "../../config";
+import { cloudinary_upload_preset } from "../utils/config";
 
 // CloudinaryUpload component receives setUrl and setName as props to update image URL and name
 const CloudinaryUpload = ({ setUrl, setName }) => {
