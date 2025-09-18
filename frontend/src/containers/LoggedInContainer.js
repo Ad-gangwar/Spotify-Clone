@@ -9,6 +9,7 @@ import songContext from '../contexts/songContext';
 import CreatePlaylistModal from "../modals/CreatePlaylistModal";
 import AddToPlaylistModal from "../modals/AddToPlaylistModal";
 import { makeAuthPostReq } from "../components/utils/serverHelper";
+import toast from "react-hot-toast";
 
 export default function LoggedInContainer({ children, currActiveScreen }) {
   const navigate = useNavigate();
@@ -70,7 +71,11 @@ export default function LoggedInContainer({ children, currActiveScreen }) {
       payload
     );
     if (response._id) {
-      setAddToPlaylistModalOpen(false)
+      setAddToPlaylistModalOpen(false);
+      toast.success('Song added successfully!');
+    }
+    else{
+      toast.error('Failed to add the song!');
     }
   };
 
@@ -117,6 +122,9 @@ export default function LoggedInContainer({ children, currActiveScreen }) {
           <div>
             <div onClick={() => { navigate("/") }}>
               <TextIcon iconName="ion:home-sharp" text="Home" active={currActiveScreen === "home"} />
+            </div>
+            <div onClick={() => { navigate("/allSongs") }}>
+              <TextIcon iconName="streamline:music-folder-song" text="All Songs" active={currActiveScreen === "allSongs"} />
             </div>
             <div onClick={() => { navigate("/search") }}>
               <TextIcon iconName="iconamoon:search-bold" text="Search" active={currActiveScreen === "search"} />

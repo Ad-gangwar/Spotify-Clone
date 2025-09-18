@@ -6,6 +6,7 @@ import Input from '../components/shared/Input';
 import CloudinaryUpload from '../components/shared/CloudinaryUpload';
 import { makeAuthPostReq } from '../components/utils/serverHelper';
 import LoggedInContainer from '../containers/LoggedInContainer';
+import toast from 'react-hot-toast';
 
 export default function UploadSong() {
     const navigate = useNavigate();
@@ -19,10 +20,10 @@ export default function UploadSong() {
         const response = await makeAuthPostReq('/song/createSong', data);
         console.log(response);
         if (response.err) {
-            alert("Failed to upload the song!");
+            toast.error("Failed to upload the song!");
             return;
         }
-        alert("Song uploaded successfully.");
+        toast.success("Song uploaded successfully.");
         navigate("/");
     }
     return (

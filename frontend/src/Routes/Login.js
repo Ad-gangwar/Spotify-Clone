@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router-dom';
 import { makeUnauthPostReq } from '../components/utils/serverHelper';
 import { useCookies } from 'react-cookie';
+import toast from 'react-hot-toast';
 
 export default function Login() {
     let navigate = useNavigate();
@@ -22,16 +23,17 @@ export default function Login() {
                 // console.log(token);
                 //setting time for the expiry of the token
                 const date = new Date();
-                date.setDate(date.getDate() + 30);
+                date.setDate(date.getDate() + 1);
                 setCookie("token", token, { path: "/", expires: date });
                 setCookie("userEmail", email, { path: "/"});
-                alert("Logged in Successfully!");
+                toast.success("Logged in Successfully!");
                 navigate("/");
             } else {
-                alert("Enter valid Credentials!");
+                toast.error("Enter valid Credentials!");
             }
         } catch (error) {
             console.error("Error:", error);
+
         }
     };
 

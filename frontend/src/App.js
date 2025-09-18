@@ -3,6 +3,7 @@ import Login from './Routes/Login';
 import Signup from './Routes/Signup';
 // import Home from './components/Home';
 import UploadSong from './Routes/UploadSong';
+import toast, { Toaster } from 'react-hot-toast';
 import MyMusic from './Routes/myMusic';
 import LoggedInHome from './Routes/LoggedInHome';
 import { useCookies } from 'react-cookie';
@@ -12,6 +13,7 @@ import Search from './Routes/Search';
 import Library from './Routes/Library';
 import SinglePlaylistView from './Routes/SinglePlaylistView';
 import MyProfile from './components/MyProfile';
+import AllSongs from './Routes/AllSongs';
 
 export default function App() {
   const [cookie, setCookie] = useCookies(["token"]);
@@ -21,6 +23,7 @@ export default function App() {
 
   return (
     <div className='vh-100 w-100'>
+      <Toaster />
       <BrowserRouter>
         {cookie.token ?
           <songContext.Provider value={{
@@ -37,10 +40,11 @@ export default function App() {
               <Route path='/' element={<LoggedInHome />}></Route>
               <Route path='/uploadSong' element={<UploadSong />}></Route>
               <Route path='/myMusic' element={<MyMusic />}></Route>
+              <Route path='/allSongs' element={<AllSongs />}></Route>
               <Route path='/search' element={<Search />}></Route>
               <Route path='/library' element={<Library />}></Route>
               <Route path='/myProfile' element={<MyProfile />}></Route>
-              <Route path='/playlist/:playlistId' element={<SinglePlaylistView/>}></Route>
+              <Route path='/playlist/:playlistId' element={<SinglePlaylistView />}></Route>
               <Route path='*' element={<Navigate to='/' />}></Route>
             </Routes>
           </songContext.Provider> :

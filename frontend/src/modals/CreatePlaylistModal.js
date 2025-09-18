@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Input from '../components/shared/Input';
 import { makeAuthPostReq } from '../components/utils/serverHelper';
+import toast from 'react-hot-toast';
 
 export default function CreatePlaylistModal({ closeModal }) {
     const [playlistName, setPlaylistName] = useState("");
@@ -13,8 +14,11 @@ export default function CreatePlaylistModal({ closeModal }) {
         );
         console.log(response);
         if (response._id) {
-            alert('Playlist created successfully!');
+            toast.success('Playlist created successfully!');
             closeModal();
+        }
+        else{
+            toast.error('Failed to create the playlist!');
         }
     };
 

@@ -16,7 +16,7 @@ export default function Search() {
         );
         setSongData(response.data);
     };
-    console.log(songData);
+
     return (
         <LoggedInContainer currActiveScreen='search'>
             <div className='w-100 py-3'>

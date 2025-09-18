@@ -14,7 +14,6 @@ const SinglePlaylistView = () => {
                 "/playlist/get/playlist/" + playlistId
             );
             setPlaylistDetails(response);
-            console.log(response);
         };
         getData();
     }, []);

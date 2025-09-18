@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { makeUnauthPostReq } from '../components/utils/serverHelper';
 import { useCookies } from "react-cookie";
+import toast from 'react-hot-toast';
 
 export default function Signup() {
     const [cookie, setCookie] = useCookies(["token"]);
@@ -18,13 +19,13 @@ export default function Signup() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (email !== confirmEmail) {
-            alert("Email and confirm email does not match. Please check again");
+            toast.error("Email and confirm email does not match. Please check again");
             return;
         }
         const data = { email, username, password, firstName, lastName };
         const response = await makeUnauthPostReq('/auth/register', data);
         if (response && !response.err) {
-            alert("Congratulations! You are successfully registered.");
+            toast.success("Congratulations! You are successfully registered.");
             const token = response.token;
             const date = new Date();
             date.setDate(date.getDate() + 30);
