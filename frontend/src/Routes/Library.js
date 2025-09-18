@@ -25,9 +25,8 @@ export default function Library() {
                 <div className="row">
                     {myPlaylists.map((item) => {
                         return (
-                            <div className='col col-lg-3 col-md-4 col-sm-6 m-2'>
+                            <div className='col col-lg-3 col-md-4 col-sm-6 m-2' key={item._id}>
                                 <Card
-                                    key={JSON.stringify(item)}
                                     title={item.name}
                                     description=""
                                     imgUrl={item.thumbnail}
@@ -45,7 +44,7 @@ export default function Library() {
 const Card = ({ title, description, imgUrl, playlistId }) => {
     let navigate = useNavigate();
     return (
-        <div className="card cursor-pointer" style={{ maxWidth: "14rem", height: "16rem", backgroundColor: "#272525" }}
+        <div className="card cursor-pointer mobile-card" style={{ maxWidth: "14rem", height: "16rem", backgroundColor: "#272525" }}
             onClick={() => {
                 navigate("/playlist/" + playlistId);
             }}>

@@ -105,10 +105,11 @@ const PlaylistView = ({ titleText, cardsData }) => {
     return (
         <div>
             <h2 className='text-white m-4'>{titleText}</h2>
-            <div className='d-flex flex-wrap  justify-content-evenly'>
-                {cardsData.map((item) => {
+            <div className='d-flex flex-wrap justify-content-evenly'>
+                {cardsData.map((item, index) => {
                     return (
                         <Card
+                            key={index}
                             title={item.title}
                             description={item.description}
                             imgUrl={item.imgUrl}
@@ -122,7 +123,7 @@ const PlaylistView = ({ titleText, cardsData }) => {
 
 const Card = ({ title, description, imgUrl }) => {
     return (
-        <div className="card m-2" style={{ width: "12rem", height: "18rem", backgroundColor: "#272525" }}>
+        <div className="card m-2 mobile-card" style={{ width: "12rem", height: "18rem", backgroundColor: "#272525" }}>
             <img src={imgUrl} className="card-img-top p-3 pb-1" alt="..." />
             <div className="card-body">
                 <div className="card-title text-light iconText">{title.length >= 19 ? title.slice(0, 17) + ".." : title}</div>

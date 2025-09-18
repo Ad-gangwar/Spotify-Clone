@@ -15,6 +15,7 @@ export default function LoggedInContainer({ children, currActiveScreen }) {
   const navigate = useNavigate();
   const [createPlaylistModalOpen, setCreatePlaylistModalOpen] = useState(false);
   const [addToPlaylistModalOpen, setAddToPlaylistModalOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const {
     currentSong,
@@ -96,6 +97,12 @@ export default function LoggedInContainer({ children, currActiveScreen }) {
 
   return (
     <div className='h-100 w-100 .font-poppins'>
+      {/* Mobile Overlay */}
+      <div 
+        className={`mobile-overlay ${sidebarOpen ? 'show' : ''}`}
+        onClick={() => setSidebarOpen(false)}
+      ></div>
+
       {/* Render CreatePlaylistModal conditionally */}
       {createPlaylistModalOpen && (
         <CreatePlaylistModal
@@ -115,28 +122,30 @@ export default function LoggedInContainer({ children, currActiveScreen }) {
       )}
 
       <div className='w-100 d-flex .font-poppins position-relative' style={{ height: currentSong ? "89%" : "100%" }}>
-        <div className='w-25 d-flex-col' style={{ backgroundColor: "#1c1c1c" }}>
+        {/* Sidebar */}
+        <div className={`w-25 d-flex-col mobile-sidebar ${sidebarOpen ? 'open' : ''}`} style={{ backgroundColor: "#1c1c1c" }}>
           <div className='p-4 container'>
             <img src={spotify_logo} alt='spotify_logo' width={140}></img>
           </div>
           <div>
-            <div onClick={() => { navigate("/") }}>
+            <div onClick={() => { navigate("/"); setSidebarOpen(false); }}>
               <TextIcon iconName="ion:home-sharp" text="Home" active={currActiveScreen === "home"} />
             </div>
-            <div onClick={() => { navigate("/allSongs") }}>
+            <div onClick={() => { navigate("/allSongs"); setSidebarOpen(false); }}>
               <TextIcon iconName="streamline:music-folder-song" text="All Songs" active={currActiveScreen === "allSongs"} />
             </div>
-            <div onClick={() => { navigate("/search") }}>
+            <div onClick={() => { navigate("/search"); setSidebarOpen(false); }}>
               <TextIcon iconName="iconamoon:search-bold" text="Search" active={currActiveScreen === "search"} />
             </div>
-            <div onClick={() => navigate("/library")}><TextIcon iconName="fluent:library-16-filled" text="Your Library" active={currActiveScreen === "library"} /></div>
+            <div onClick={() => { navigate("/library"); setSidebarOpen(false); }}><TextIcon iconName="fluent:library-16-filled" text="Your Library" active={currActiveScreen === "library"} /></div>
             <div onClick={() => {
               navigate("/myMusic");
+              setSidebarOpen(false);
             }}><TextIcon iconName="solar:music-notes-bold" text="My Music" active={currActiveScreen === "myMusic"} /></div>
           </div>
 
           <div className='mt-4'>
-            <div onClick={() => setCreatePlaylistModalOpen(true)}>
+            <div onClick={() => { setCreatePlaylistModalOpen(true); setSidebarOpen(false); }}>
               <TextIcon iconName="icon-park-solid:add" text="Create Playlist" active={currActiveScreen === "playlist"} />
             </div>
 
@@ -149,8 +158,10 @@ export default function LoggedInContainer({ children, currActiveScreen }) {
             </div>
           </div>
         </div>
-        <div className='w-75 overflow-auto' style={{ backgroundColor: "#1b1919" }}>
-          <LoggedInNavbar />
+        
+        {/* Main Content */}
+        <div className='w-75 overflow-auto mobile-main-content' style={{ backgroundColor: "#1b1919" }}>
+          <LoggedInNavbar onMenuClick={() => setSidebarOpen(true)} />
           {children}
         </div>
       </div>
@@ -158,33 +169,33 @@ export default function LoggedInContainer({ children, currActiveScreen }) {
       {/* This div is for the current playing song */}
       {
         currentSong &&
-        <div className="bg-dark w-100 fixed-bottom text-white d-flex flex-row justify-content-between align-items-center" style={{ height: "11%" }}>
+        <div className="bg-dark w-100 fixed-bottom text-white d-flex flex-row justify-content-between align-items-center mobile-player" style={{ height: "11%" }}>
           <div className='d-flex flex-row align-items-center'>
             <img src={currentSong.thumbnail} alt=" " height="50rem" width="50rem" className='mx-2 my-2 rounded' />
-            <div className='mx-2 my-1'>
+            <div className='mx-2 my-1 mobile-hidden'>
               <div>{currentSong.name}</div>
               <div style={{ color: "#ada5a5" }}>{currentSong.artist.firstName + " " + currentSong.artist.lastName}</div>
             </div>
-            <Icon icon="ant-design:heart-outlined" width={22} className='mx-3 cursor-pointer' color="gray" />
-            <Icon icon="icon-park-solid:full-screen-play" width={22} className='mx-2 cursor-pointer' color="gray" />
+            <Icon icon="ant-design:heart-outlined" width={22} className='mx-3 cursor-pointer mobile-hidden' color="gray" />
+            <Icon icon="icon-park-solid:full-screen-play" width={22} className='mx-2 cursor-pointer mobile-hidden' color="gray" />
           </div>
-          <div className='d-flex flex-column align-items-center mt-2'>
+          <div className='d-flex flex-column align-items-center mt-2 mobile-player-controls'>
             <div className='d-flex align-items-center'>
-              <Icon icon="raphael:shuffle" width={18} className='mx-3 cursor-pointer' color="gray" />
+              <Icon icon="raphael:shuffle" width={18} className='mx-3 cursor-pointer mobile-hidden' color="gray" />
               <Icon icon="streamline:button-previous-solid" width={15} className='mx-2 cursor-pointer' color="gray" />
               <Icon icon={isPaused ? "ic:baseline-play-circle" : "ic:baseline-pause-circle"} width={40} className='mx-3 cursor-pointer' color="gray" onClick={() => {
                 togglePlayPause();
               }} />
               <Icon icon="streamline:button-next-solid" width={15} className='mx-2 cursor-pointer' color="gray" />
-              <Icon icon="icon-park-outline:loop-once" width={18} className='mx-3 cursor-pointer' color="gray" />
+              <Icon icon="icon-park-outline:loop-once" width={18} className='mx-3 cursor-pointer mobile-hidden' color="gray" />
             </div>
-            <div className='d-flex align-items-center'>
+            <div className='d-flex align-items-center mobile-hidden'>
               <div style={{ fontSize: "0.8rem" }}>0:01</div>
               <div><Icon icon="pepicons-pop:line-x" className='mx-4' /></div>
               <div style={{ fontSize: "0.8rem" }}>3:44</div>
             </div>
           </div>
-          <div className='d-flex flex-row align-items-center mx-3'>
+          <div className='d-flex flex-row align-items-center mx-3 mobile-hidden'>
             <Icon icon="ph:microphone-stage" className='mx-2 cursor-pointer' width={22} color="gray" />
             <Icon icon="mdi:television-speaker" className='mx-2 cursor-pointer' width={22} color="gray" />
             <Icon icon="mdi:speakerphone" className='mx-2 cursor-pointer' width={22} color="gray" />

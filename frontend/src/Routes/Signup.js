@@ -41,7 +41,7 @@ export default function Signup() {
 
             <div className='fw-bold text-center mb-3 fs-4'>Sign up for free to start listening.</div>
             <div className='w-100 d-flex'>
-                <main className="form-signin m-auto">
+                <main className="form-signin mobile-form m-auto">
                     <form className='mb-3' onSubmit={handleSubmit}>
 
                         <Input label="What's your email?" placeholder="Enter your email." type="email" value={email} setValue={setEmail} />

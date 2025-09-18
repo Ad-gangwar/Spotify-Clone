@@ -46,7 +46,7 @@ export default function Login() {
 
             <div className='fw-bold text-center mt-5 mb-4'>To continue, log in to Spotify.</div>
             <div className='w-100 d-flex'>
-                <main className="form-signin m-auto">
+                <main className="form-signin mobile-form m-auto">
                     <form className='mb-3' onSubmit={handleSubmit}>
                         <Input label="Email address or username" placeholder="Email address or username" type="email" value={email} setValue={setEmail}
                         />

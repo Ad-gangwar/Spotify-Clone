@@ -21,9 +21,9 @@ export default function Search() {
         <LoggedInContainer currActiveScreen='search'>
             <div className='w-100 py-3'>
                 <div
-                    className={`m-4 p-2 px-4 rounded-pill w-50 flex ${isInputFocused ? 'border border-white' : ''
+                    className={`m-4 p-2 px-4 rounded-pill mobile-search-bar flex ${isInputFocused ? 'border border-white' : ''
                         }`}
-                    style={{ backgroundColor: '#2d2b2b', outline: 'none' }}
+                    style={{ backgroundColor: '#2d2b2b', outline: 'none', width: '50%' }}
                 >
                     <span>
                         <Icon icon='iconamoon:search' color='white' width={22} className='iconText' />
